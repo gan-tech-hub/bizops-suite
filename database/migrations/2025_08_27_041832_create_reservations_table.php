@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');        // イベントタイトル
-            $table->datetime('start');      // 開始日時
-            $table->datetime('end');        // 終了日時
+            $table->string('title');                               // イベントタイトル
+            $table->datetime('start');                             // 開始日時
+            $table->datetime('end')->nullable();                   // 終了日時
             $table->unsignedBigInteger('customer_id')->nullable(); // 顧客との紐づけ
             $table->timestamps();
 

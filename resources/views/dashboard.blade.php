@@ -24,7 +24,7 @@
                     <p class="text-gray-600 dark:text-gray-400">顧客情報の登録・編集・検索ができます</p>
                 </a>
 
-                <a href="{{ route('reservations.index') }}" 
+                <a href="{{ route('reservations.view') }}" 
                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
                     <h3 class="text-xl font-semibold mb-2">📅 予約管理</h3>
                     <p class="text-gray-600 dark:text-gray-400">予約の登録・確認・編集ができます</p>

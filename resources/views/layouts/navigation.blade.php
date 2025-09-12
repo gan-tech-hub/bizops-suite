@@ -13,7 +13,17 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('ダッシュボード') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
+                        {{ __('顧客管理') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('reservations.view')" :active="request()->routeIs('reservations.*')">
+                        {{ __('予約管理') }}
                     </x-nav-link>
                 </div>
             </div>

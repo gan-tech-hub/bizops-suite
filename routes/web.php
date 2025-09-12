@@ -40,6 +40,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/reservations', [ReservationController::class, 'view'])->name('reservations.view');
-Route::resource('reservations', ReservationController::class);
+#Route::resource('reservations', ReservationController::class)->except(['index']);
+Route::get('/reservations/{reservation}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+Route::put('/reservations/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
+Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::prefix('api')->group(function() {
+    Route::get('reservations', [ReservationController::class, 'apiIndex']);
+    Route::post('reservations', [ReservationController::class, 'apiStore']);
+    Route::put('reservations/{id}', [ReservationController::class, 'apiUpdate']);
+    Route::delete('reservations/{id}', [ReservationController::class, 'apiDestroy']);
+});
 
 require __DIR__.'/auth.php';
