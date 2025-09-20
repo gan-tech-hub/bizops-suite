@@ -17,7 +17,6 @@ class Reservation extends Model
         'location',
         'description',
         'staff',
-        'customer',
         'color',
     ];
 

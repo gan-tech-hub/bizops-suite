@@ -60,10 +60,15 @@
 
                     <!-- 顧客名 -->
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">顧客名</label>
-                        <input type="text" name="customer" 
-                               value="{{ old('customer', $reservation->customer) }}" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <select name="customer_id" id="customer_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="">-- 顧客を選択 --</option>
+                            @foreach($customers as $c)
+                                <option value="{{ $c->id }}"
+                                    {{ old('customer_id', $reservation->customer_id ?? '') == $c->id ? 'selected' : '' }}>
+                                    {{ $c->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <!-- 詳細 -->

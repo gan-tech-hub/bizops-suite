@@ -3,7 +3,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
+// helpers
 function formatDateForInput(date) {
+    if (!date) return '';
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -12,18 +14,52 @@ function formatDateForInput(date) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-async function updateReservationDate(info) {
-    const formEl = document.createElement('form');
-    formEl.method = 'POST';
-    formEl.action = `/reservations/${info.event.id}`;
-    formEl.innerHTML = `
-        <input type="hidden" name="_method" value="PUT">
-        <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-        <input type="hidden" name="start" value="${formatDateForInput(info.event.start)}">
-        <input type="hidden" name="end" value="${info.event.end ? formatDateForInput(info.event.end) : ''}">
-    `;
-    document.body.appendChild(formEl);
-    formEl.submit();
+function formatDateForDisplay(date) {
+    if (!date) return '';
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
+
+/**
+ * 動的に form を作って submit するユーティリティ
+ * action: URL, method: POST/PUT/DELETE/GET (GET rarely used), data: object (key:value)
+ */
+function submitForm(action, method = 'POST', data = {}) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = action;
+    form.style.display = 'none';
+
+    // CSRF
+    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const inputToken = document.createElement('input');
+    inputToken.type = 'hidden';
+    inputToken.name = '_token';
+    inputToken.value = token;
+    form.appendChild(inputToken);
+
+    if (method !== 'POST') {
+        const m = document.createElement('input');
+        m.type = 'hidden';
+        m.name = '_method';
+        m.value = method;
+        form.appendChild(m);
+    }
+
+    Object.entries(data).forEach(([k, v]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = k;
+        input.value = v ?? '';
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -31,13 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
 
     const calendar = new Calendar(calendarEl, {
+        timeZone: 'Asia/Tokyo',
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         selectable: true,
         editable: true,
         locale: 'ja',
 
-        // events: APIで取得
+        // events: APIで取得（読み取りはJSONで）
         events: async function(fetchInfo, successCallback, failureCallback) {
             try {
                 const response = await fetch('/api/reservations');
@@ -50,8 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     end: event.end,
                     location: event.location || '',
                     staff: event.staff || '',
-                    customer: event.customer || '',
+                    customer_name: event.customer_name || '',
                     description: event.description || '',
+                    customer_id: event.customer_id || null,
                 }));
                 successCallback(events);
             } catch (error) {
@@ -60,14 +98,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
 
-        // 新規追加（モーダル内フォームは /api/reservations へ POST）
+        // 日付範囲選択（新規モーダル表示）
         select: function(info) {
             const modal = document.getElementById('createReservationModal');
             const form = document.getElementById('createReservationForm');
             const cancelBtn = document.getElementById('createCancelBtn');
 
-            form.start.value = info.startStr ? info.startStr.slice(0,16) : '';
-            form.end.value = info.endStr ? info.endStr.slice(0,16) : '';
+            // フォーム要素を明示的に取得
+            const titleEl = form.querySelector('input[name="title"]');
+            const colorEl = form.querySelector('input[name="color"]');
+            const startEl = form.querySelector('input[name="start"]');
+            const endEl = form.querySelector('input[name="end"]');
+            const locationEl = form.querySelector('input[name="location"]');
+            const staffEl = form.querySelector('input[name="staff"]');
+            const customerIdEl = form.querySelector('select[name="customer_id"]')
+            const descriptionEl = form.querySelector('textarea[name="description"]');
+
+            startEl.value = info.startStr ? info.startStr.slice(0,16) : '';
+            endEl.value   = info.endStr ? info.endStr.slice(0,16) : '';
 
             modal.classList.remove('hidden');
 
@@ -76,29 +124,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.reset();
             };
 
-            form.onsubmit = async (e) => {
+            // submit は動的 form で送る（リダイレクト + flash を狙う）
+            form.onsubmit = (e) => {
                 e.preventDefault();
-
-                const formEl = document.createElement('form');
-                formEl.method = 'POST';
-                formEl.action = '/reservations';
-                formEl.innerHTML = `
-                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                    <input type="hidden" name="title" value="${form.title.value}">
-                    <input type="hidden" name="color" value="${form.color.value}">
-                    <input type="hidden" name="start" value="${form.start.value}">
-                    <input type="hidden" name="end" value="${form.end.value}">
-                    <input type="hidden" name="location" value="${form.location.value}">
-                    <input type="hidden" name="staff" value="${form.staff.value}">
-                    <input type="hidden" name="customer" value="${form.customer.value}">
-                    <input type="hidden" name="description" value="${form.description.value}">
-                `;
-                document.body.appendChild(formEl);
-                formEl.submit();
+                // 必要フィールドを集める
+                const payload = {
+                    title: titleEl.value,
+                    color: colorEl.value,
+                    start: startEl.value,
+                    end: endEl.value,
+                    location: locationEl.value,
+                    staff: staffEl.value,
+                    // customer は selectなら customer_id, name フィールドになっている場合は調整
+                    customer_id: customerIdEl ? customerIdEl.value : '',
+                    description: descriptionEl.value,
+                };
+                submitForm('/reservations', 'POST', payload);
             };
+
+            calendar.unselect();
         },
 
-        // イベントクリック（モーダル表示）
+        // イベントクリック（モーダル）
         eventClick: function(info) {
             currentEvent = info.event;
 
@@ -117,51 +164,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
             titleEl.textContent = info.event.title;
             colorEl.textContent = info.event.backgroundColor;
-            startEl.textContent = info.event.start ? info.event.start.toLocaleString('ja-JP', { hour12: false }) : '';
-            endEl.textContent = info.event.end ? info.event.end.toLocaleString('ja-JP', { hour12: false }) : '';
+            startEl.textContent = formatDateForDisplay(info.event.start);
+            endEl.textContent = formatDateForDisplay(info.event.end);
             locationEl.textContent = info.event.extendedProps.location || '未設定';
             staffEl.textContent = info.event.extendedProps.staff || '未設定';
-            customerEl.textContent = info.event.extendedProps.customer || '未設定';
+
+            // 顧客リンク（customer_id があればリンク）
+            if (info.event.extendedProps.customer_id) {
+                customerEl.innerHTML = `
+                    <a href="/customers/${info.event.extendedProps.customer_id}" class="text-blue-600 hover:underline">
+                        ${info.event.extendedProps.customer_name || '顧客'}
+                    </a>
+                `;
+            } else {
+                customerEl.textContent = info.event.extendedProps.customer_name || '未設定';
+            }
+
             descriptionEl.textContent = info.event.extendedProps.description || 'なし';
 
             modal.classList.remove('hidden');
 
             closeBtn.onclick = () => modal.classList.add('hidden');
 
-            // 削除（APIへDELETE → 成功したらリダイレクト）
-            deleteBtn.onclick = async () => {
+            // 削除は動的 form で送信（redirect + flash）
+            deleteBtn.onclick = () => {
                 if (!currentEvent) return;
                 if (!confirm('このイベントを削除しますか？')) return;
-
-                // ✅ 動的フォームでDELETEリクエスト送信
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/reservations/${currentEvent.id}`;
-                form.innerHTML = `
-                    <input type="hidden" name="_method" value="DELETE">
-                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                `;
-                document.body.appendChild(form);
-                form.submit();
+                submitForm(`/reservations/${currentEvent.id}`, 'DELETE', {});
             };
 
-            // 編集へ遷移
+            // 編集ボタンは編集ページへ遷移
             editBtn.onclick = () => {
                 if (!currentEvent) return;
                 window.location.href = `/reservations/${currentEvent.id}/edit`;
             };
         },
 
-        // ドラッグで日時変更（API PUT を叩いて、成功したらリダイレクト）
+        // ドラッグで日時変更（フォーム送信で PUT）
         eventDrop: function(info) {
             if (!confirm('予約を移動してよろしいですか？')) {
                 info.revert();
                 return;
             }
 
-            (async () => {
-                await updateReservationDate(info);
-            })();
+            // title と customer_id は検証で必要なら送る（存在しなければ空文字）
+            const title = info.event.title || '';
+            const customerId = info.event.extendedProps.customer_id || '';
+
+            const payload = {
+                title: title,
+                start: info.event.start ? info.event.start.toISOString() : '',
+                end: info.event.end ? info.event.end.toISOString() : '',
+                customer_id: customerId,
+            };
+            submitForm(`/reservations/${info.event.id}`, 'PUT', payload);
         },
 
         // リサイズ（終了日時変更）
@@ -170,52 +226,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 info.revert();
                 return;
             }
+            const title = info.event.title || '';
+            const customerId = info.event.extendedProps.customer_id || '';
 
-            (async () => {
-                await updateReservationDate(info);
-            })();
+            const payload = {
+                title: title,
+                start: info.event.start ? info.event.start.toISOString() : '',
+                end: info.event.end ? info.event.end.toISOString() : '',
+                customer_id: customerId,
+            };
+            submitForm(`/reservations/${info.event.id}`, 'PUT', payload);
         },
 
-        // dateClick（クリックで新規モーダル）
+        // クリックで新規（単一クリック用）
         dateClick: function(info) {
+            // 同じ create モーダルのロジックを流用
             const modal = document.getElementById('createReservationModal');
-            const startInput = document.querySelector('#createReservationForm input[name="start"]');
-            const endInput = document.querySelector('#createReservationForm input[name="end"]');
+            const form = document.getElementById('createReservationForm');
+            const titleEl = form.querySelector('input[name="title"]');
+            const colorEl = form.querySelector('input[name="color"]');
+            const startEl = form.querySelector('input[name="start"]');
+            const endEl = form.querySelector('input[name="end"]');
 
             const clickedDate = new Date(info.date);
             const now = new Date();
             clickedDate.setHours(now.getHours(), now.getMinutes(), 0, 0);
 
-            const startStr = formatDateForInput(clickedDate);
+            startEl.value = formatDateForInput(clickedDate);
             const endDate = new Date(clickedDate.getTime() + 60 * 60 * 1000);
-            const endStr = formatDateForInput(endDate);
-
-            startInput.value = startStr;
-            endInput.value = endStr;
+            endEl.value = formatDateForInput(endDate);
 
             modal.classList.remove('hidden');
 
-            // 新規予約作成
-            form.onsubmit = (e) => {
-                e.preventDefault();
-
-                const formEl = document.createElement('form');
-                formEl.method = 'POST';
-                formEl.action = '/reservations';
-                formEl.innerHTML = `
-                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').content}">
-                    <input type="hidden" name="title" value="${form.title.value}">
-                    <input type="hidden" name="color" value="${form.color.value}">
-                    <input type="hidden" name="start" value="${form.start.value}">
-                    <input type="hidden" name="end" value="${form.end.value}">
-                    <input type="hidden" name="location" value="${form.location.value}">
-                    <input type="hidden" name="staff" value="${form.staff.value}">
-                    <input type="hidden" name="customer" value="${form.customer.value}">
-                    <input type="hidden" name="description" value="${form.description.value}">
-                `;
-                document.body.appendChild(formEl);
-                formEl.submit();
-            };
+            // create form submit handled in form.onsubmit (see select)
         },
     });
 

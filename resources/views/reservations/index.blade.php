@@ -10,16 +10,17 @@
                 <div class="bg-white shadow-sm rounded-lg p-4">
                     @if(session('success'))
                         <div id="flash-message" 
-                            class="bg-green-500 text-white px-4 py-2 rounded flex justify-between items-center 
-                                    transition-all duration-1000 ease-in-out overflow-hidden">
+                            class="text-green-800 bg-green-100 border border-green-300 px-4 py-2 rounded flex justify-between items-center transition-all duration-1000 ease-in-out overflow-hidden">
                             <span>{{ session('success') }}</span>
                             <span id="countdown" class="text-sm opacity-80 ml-4">5s</span>
                         </div>
+                        <div id="spacer" class="p-2"></div>
 
                         <script>
                             document.addEventListener("DOMContentLoaded", function () {
                                 const flashMessage = document.getElementById("flash-message");
                                 const countdownEl = document.getElementById("countdown");
+                                const spacerEl = document.getElementById("spacer");
 
                                 if (flashMessage && countdownEl) {
                                     let seconds = 5; // 表示時間（秒）
@@ -36,6 +37,7 @@
 
                                             setTimeout(() => {
                                                 flashMessage.remove(); // 完全に削除
+                                                spacerEl.remove();
                                             }, 1000); // duration と合わせる
                                         }
                                     }, 1000);
@@ -75,11 +77,11 @@
             <form id="createReservationForm">
                 <div class="mb-2">
                     <label class="block text-sm font-medium">タイトル</label>
-                    <input type="text" name="title" class="w-full border rounded p-2" required>
+                    <input type="text" name="title" class="w-full border rounded p-2">
                 </div>
                 <div class="mb-2">
                     <label class="block text-sm font-medium">ラベル色</label>
-                    <input type="color" name="color" class="w-full border rounded p-2" value="#3788d8">
+                    <input type="color" name="color" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value="#3788d8">
                 </div>
                 <div class="mb-2">
                     <label class="block text-sm font-medium">開始</label>
@@ -98,8 +100,15 @@
                     <input type="text" name="staff" class="w-full border rounded p-2">
                 </div>
                 <div class="mb-2">
-                    <label class="block text-sm font-medium">顧客名</label>
-                    <input type="text" name="customer" class="w-full border rounded p-2">
+                    <label for="customer_id" class="block text-sm font-medium text-gray-700">顧客</label>
+                    <select name="customer_id" id="customer_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">-- 顧客を選択 --</option>
+                        @foreach ($customers as $customer)
+                            <option value="{{ $customer->id }}">
+                                {{ $customer->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="mb-2">
                     <label class="block text-sm font-medium">詳細</label>

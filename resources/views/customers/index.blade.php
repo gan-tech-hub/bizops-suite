@@ -11,9 +11,41 @@
 
                 {{-- フラッシュメッセージ --}}
                 @if (session('success'))
-                    <div class="mb-4 p-4 text-green-800 bg-green-100 border border-green-300 rounded">
-                        {{ session('success') }}
+                    <div id="flash-message" 
+                        class="text-green-800 bg-green-100 border border-green-300 px-4 py-2 rounded flex justify-between items-center transition-all duration-1000 ease-in-out overflow-hidden">
+                        <span>{{ session('success') }}</span>
+                        <span id="countdown" class="text-sm opacity-80 ml-4">5s</span>
                     </div>
+                    <div id="spacer" class="p-2"></div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const flashMessage = document.getElementById("flash-message");
+                            const countdownEl = document.getElementById("countdown");
+                            const spacerEl = document.getElementById("spacer");
+
+                            if (flashMessage && countdownEl) {
+                                let seconds = 5; // 表示時間（秒）
+
+                                const interval = setInterval(() => {
+                                    seconds--;
+                                    countdownEl.textContent = seconds + "s";
+
+                                    if (seconds <= 0) {
+                                        clearInterval(interval);
+
+                                        // フェードアウト＋高さ縮小
+                                        flashMessage.classList.add("opacity-0");
+
+                                        setTimeout(() => {
+                                            flashMessage.remove(); // 完全に削除
+                                            spacerEl.remove();
+                                        }, 1000); // duration と合わせる
+                                    }
+                                }, 1000);
+                            }
+                        });
+                    </script>
                 @endif
 
                 <a href="{{ route('customers.create') }}" 

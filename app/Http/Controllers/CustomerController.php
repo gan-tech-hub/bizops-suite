@@ -52,7 +52,8 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $customer = Customer::with('reservations')->findOrFail($id);
+        return view('customers.show', compact('customer'));
     }
 
     /**
