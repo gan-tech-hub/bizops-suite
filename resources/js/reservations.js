@@ -74,6 +74,13 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: true,
         locale: 'ja',
 
+        // イベント表示の時間フォーマット
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+
         // events: APIで取得（読み取りはJSONで）
         events: async function(fetchInfo, successCallback, failureCallback) {
             try {
@@ -164,6 +171,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             titleEl.textContent = info.event.title;
             colorEl.textContent = info.event.backgroundColor;
+            colorEl.innerHTML = `
+                <p class="flex items-center gap-2">
+                    <strong>ラベル色:</strong>
+                    <span class="rounded-md border border-gray-300 shadow-sm w-5 h-5" style="background-color: ${info.event.backgroundColor};"></span>
+                    <span>${info.event.backgroundColor}</span>
+                </p>
+            `;
             startEl.textContent = formatDateForDisplay(info.event.start);
             endEl.textContent = formatDateForDisplay(info.event.end);
             locationEl.textContent = info.event.extendedProps.location || '未設定';

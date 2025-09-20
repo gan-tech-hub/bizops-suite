@@ -56,7 +56,7 @@
     <div id="reservationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-96 p-6">
             <h2 id="modalTitle" class="text-lg font-semibold mb-4"></h2>
-            <p><strong>ラベル色:</strong> <span id="modalColor"></span></p>
+            <p><span id="modalColor"></span></p>
             <p><strong>開始:</strong> <span id="modalStart"></span></p>
             <p><strong>終了:</strong> <span id="modalEnd"></span></p>
             <p><strong>場所:</strong> <span id="modalLocation"></span></p>
