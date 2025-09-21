@@ -121,8 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const customerIdEl = form.querySelector('select[name="customer_id"]')
             const descriptionEl = form.querySelector('textarea[name="description"]');
 
-            startEl.value = info.startStr ? info.startStr.slice(0,16) : '';
-            endEl.value   = info.endStr ? info.endStr.slice(0,16) : '';
+            startEl.value = formatDateForInput(info.start);
+            const enddate = new Date(info.end.getTime() - 60 * 60 * 1000 * 24);
+            endEl.value = formatDateForInput(enddate);
 
             modal.classList.remove('hidden');
 
@@ -257,8 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // 同じ create モーダルのロジックを流用
             const modal = document.getElementById('createReservationModal');
             const form = document.getElementById('createReservationForm');
-            const titleEl = form.querySelector('input[name="title"]');
-            const colorEl = form.querySelector('input[name="color"]');
             const startEl = form.querySelector('input[name="start"]');
             const endEl = form.querySelector('input[name="end"]');
 
