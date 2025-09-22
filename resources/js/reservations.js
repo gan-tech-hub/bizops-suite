@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('createReservationModal');
             const form = document.getElementById('createReservationForm');
             const cancelBtn = document.getElementById('createCancelBtn');
+            const errorMsgEl = document.getElementById('errorMsg');
 
             // フォーム要素を明示的に取得
             const titleEl = form.querySelector('input[name="title"]');
@@ -128,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.classList.remove('hidden');
 
             cancelBtn.onclick = () => {
+                errorMsgEl.classList.add('hidden');
                 modal.classList.add('hidden');
                 form.reset();
             };
@@ -135,6 +137,38 @@ document.addEventListener('DOMContentLoaded', function() {
             // submit は動的 form で送る（リダイレクト + flash を狙う）
             form.onsubmit = (e) => {
                 e.preventDefault();
+                
+                const title = titleEl.value.trim();
+                const start = new Date(startEl.value);
+                const end = new Date(endEl.value);
+
+                let errors = [];
+
+                // バリデーション
+                if (!title) {
+                    errors.push("タイトルは必須です。");
+                }
+
+                if (start >= end) {
+                    errors.push("終了日時は開始日時より後に設定してください。");
+                }
+
+                // エラー表示処理
+                if (errors.length > 0) {
+                    errorMsgEl.innerHTML = `
+                        <ul class="list-disc list-inside text-sm">
+                            ${errors.map(msg => `<li>${msg}</li>`).join("")}
+                        </ul>
+                    `;
+                    errorMsgEl.classList.remove('hidden');
+                    return;
+                } else {
+                    errorMsgEl.classList.add('hidden');
+                    errorMsgEl.innerHTML = "";
+                }
+
+                errorMsgEl.classList.add('hidden');
+
                 // 必要フィールドを集める
                 const payload = {
                     title: titleEl.value,

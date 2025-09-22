@@ -74,6 +74,7 @@
     <div id="createReservationModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
             <h2 class="text-lg font-bold mb-4">新規予約</h2>
+            <div id="errorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
             <form id="createReservationForm">
                 <div class="mb-2">
                     <label class="block text-sm font-medium">タイトル</label>

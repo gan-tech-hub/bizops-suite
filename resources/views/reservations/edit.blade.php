@@ -6,6 +6,17 @@
     <div class="py-6">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
+                <!-- エラーメッセージ（Bladeのバリデーション用） -->
+                @if ($errors->any())
+                    <div class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3">
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div id="editerrorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
                 <form method="POST" action="{{ route('reservations.update', $reservation) }}">
                     @csrf
                     @method('PUT')

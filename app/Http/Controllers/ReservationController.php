@@ -43,15 +43,27 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'start' => 'required|date',
-            'end' => 'nullable|date|after_or_equal:start',
+            'end' => [
+                'nullable',
+                'date',
+                // start より後であることをチェック
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($value && strtotime($value) <= strtotime($request->start)) {
+                        $fail('終了日時は開始日時より後に設定してください。');
+                    }
+                },
+            ],
             'customer_id' => 'nullable|exists:customers,id',
             'color' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
             'staff' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
+
         $reservation->update($validated);
-        return redirect()->route('reservations.view')->with('success','予約を更新しました');
+
+        return redirect()->route('reservations.view')
+                        ->with('success', '予約を更新しました');
     }
 
     public function edit(Reservation $reservation)
