@@ -61,6 +61,7 @@
                             <th class="border px-4 py-2 text-left">メール</th>
                             <th class="border px-4 py-2 text-left">電話</th>
                             <th class="border px-4 py-2 text-left">住所</th>
+                            <th class="border px-4 py-2 text-left">担当者</th>
                             <th class="border px-4 py-2 text-center">操作</th>
                         </tr>
                     </thead>
@@ -72,6 +73,9 @@
                                 <td class="border px-4 py-2">{{ $customer->email }}</td>
                                 <td class="border px-4 py-2">{{ $customer->phone }}</td>
                                 <td class="border px-4 py-2">{{ $customer->address }}</td>
+                                <td class="border px-4 py-2">
+                                    {{ $customer->staff ? $customer->staff->name : '未設定' }}
+                                </td>
                                 <td class="border px-4 py-2 text-center space-x-2">
                                     <a href="{{ route('customers.edit', $customer) }}" 
                                        class="text-blue-500 hover:underline">編集</a>

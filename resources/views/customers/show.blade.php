@@ -15,6 +15,7 @@
                 <p><strong>メール：</strong> {{ $customer->email }}</p>
                 <p><strong>電話番号：</strong> {{ $customer->phone ?? '未登録' }}</p>
                 <p><strong>住所：</strong> {{ $customer->address ?? '未登録' }}</p>
+                <p><strong>担当者：</strong> {{ $customer->staff ? $customer->staff->name : '未設定' }}</p>
             </div>
 
             <!-- 予約一覧 -->
@@ -49,7 +50,7 @@
                                     <td class="px-6 py-4">{{ $reservation->start }}</td>
                                     <td class="px-6 py-4">{{ $reservation->end }}</td>
                                     <td class="px-6 py-4">{{ $reservation->location }}</td>
-                                    <td class="px-6 py-4">{{ $reservation->staff ?? '未設定' }}</td>
+                                    <td class="px-6 py-4">{{ $reservation->staff ? $reservation->staff->name : '未設定' }}</td>
                                     <td class="px-6 py-4">{{ $reservation->description ?? '未設定' }}</td>
                                     <td class="px-6 py-4">
                                         <a href="{{ route('reservations.edit', $reservation->id) }}" 

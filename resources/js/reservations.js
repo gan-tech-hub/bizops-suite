@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     start: event.start,
                     end: event.end,
                     location: event.location || '',
-                    staff: event.staff || '',
+                    staff_id: event.staff_id || '',
+                    staff_name: event.staff_name || '',
                     customer_name: event.customer_name || '',
                     description: event.description || '',
                     customer_id: event.customer_id || null,
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const startEl = form.querySelector('input[name="start"]');
             const endEl = form.querySelector('input[name="end"]');
             const locationEl = form.querySelector('input[name="location"]');
-            const staffEl = form.querySelector('input[name="staff"]');
+            const staffIDEl = form.querySelector('select[name="staff_id"]');
             const customerIdEl = form.querySelector('select[name="customer_id"]')
             const descriptionEl = form.querySelector('textarea[name="description"]');
 
@@ -176,8 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     start: startEl.value,
                     end: endEl.value,
                     location: locationEl.value,
-                    staff: staffEl.value,
-                    // customer は selectなら customer_id, name フィールドになっている場合は調整
+                    staff_id: staffIDEl.value,
                     customer_id: customerIdEl ? customerIdEl.value : '',
                     description: descriptionEl.value,
                 };
@@ -216,18 +216,19 @@ document.addEventListener('DOMContentLoaded', function() {
             startEl.textContent = formatDateForDisplay(info.event.start);
             endEl.textContent = formatDateForDisplay(info.event.end);
             locationEl.textContent = info.event.extendedProps.location || '未設定';
-            staffEl.textContent = info.event.extendedProps.staff || '未設定';
 
             // 顧客リンク（customer_id があればリンク）
             if (info.event.extendedProps.customer_id) {
                 customerEl.innerHTML = `
                     <a href="/customers/${info.event.extendedProps.customer_id}" class="text-blue-600 hover:underline">
-                        ${info.event.extendedProps.customer_name || '顧客'}
+                        ${info.event.extendedProps.customer_name || '未設定'}
                     </a>
                 `;
             } else {
                 customerEl.textContent = info.event.extendedProps.customer_name || '未設定';
             }
+
+            staffEl.innerHTML = info.event.extendedProps.staff_name || '未設定';
 
             descriptionEl.textContent = info.event.extendedProps.description || 'なし';
 
@@ -259,12 +260,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // title と customer_id は検証で必要なら送る（存在しなければ空文字）
             const title = info.event.title || '';
             const customerId = info.event.extendedProps.customer_id || '';
+            const staffId = info.event.extendedProps.staff_id || '';
 
             const payload = {
                 title: title,
                 start: info.event.start ? info.event.start.toISOString() : '',
                 end: info.event.end ? info.event.end.toISOString() : '',
                 customer_id: customerId,
+                staff_id: staffId,
             };
             submitForm(`/reservations/${info.event.id}`, 'PUT', payload);
         },
@@ -277,12 +280,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const title = info.event.title || '';
             const customerId = info.event.extendedProps.customer_id || '';
+            const staffId = info.event.extendedProps.staff_id || '';
 
             const payload = {
                 title: title,
                 start: info.event.start ? info.event.start.toISOString() : '',
                 end: info.event.end ? info.event.end.toISOString() : '',
                 customer_id: customerId,
+                staff_id: staffId,
             };
             submitForm(`/reservations/${info.event.id}`, 'PUT', payload);
         },

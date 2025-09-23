@@ -63,10 +63,15 @@
 
                     <!-- 担当者 -->
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">担当者名</label>
-                        <input type="text" name="staff" 
-                               value="{{ old('staff', $reservation->staff) }}" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        <select name="staff_id" id="staff_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="">-- 顧客を選択 --</option>
+                            @foreach($staffs as $s)
+                                <option value="{{ $s->id }}"
+                                    {{ old('staff_id', $reservation->staff_id ?? '') == $s->id ? 'selected' : '' }}>
+                                    {{ $s->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <!-- 顧客名 -->

@@ -44,6 +44,18 @@
                         @enderror
                     </div>
 
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium">担当者</label>
+                        <select name="staff_id" id="staff_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="">-- 担当者を選択 --</option>
+                            @foreach($staffs as $staff)
+                                <option value="{{ $staff->id }}" {{ old('staff_id', $customer->staff_id ?? '') == $staff->id ? 'selected' : '' }}>
+                                    {{ $staff->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="flex justify-end space-x-2">
                         <a href="{{ route('customers.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
                             キャンセル

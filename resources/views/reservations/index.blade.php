@@ -97,8 +97,15 @@
                     <input type="text" name="location" class="w-full border rounded p-2">
                 </div>
                 <div class="mb-2">
-                    <label class="block text-sm font-medium">担当者名</label>
-                    <input type="text" name="staff" class="w-full border rounded p-2">
+                    <label class="block text-sm font-medium">担当者</label>
+                    <select name="staff_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">-- 担当者を選択 --</option>
+                        @foreach($staffs as $staff)
+                            <option value="{{ $staff->id }}">
+                                {{ $staff->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="mb-2">
                     <label for="customer_id" class="block text-sm font-medium text-gray-700">顧客</label>

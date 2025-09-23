@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -29,7 +30,8 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customers.create');
+        $staffs = User::all();
+        return view('customers.create', compact('staffs'));
     }
 
     /**
@@ -42,9 +44,10 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:customers,email',
             'phone' => 'nullable|max:20',
             'address' => 'nullable|max:100',
+            'staff_id' => 'nullable|exists:users,id',
         ]);
         Customer::create($validated);
-        return redirect()->route('customers.index')->with('success', '顧客を登録しました。');
+        return redirect()->route('customers.index')->with('success', '顧客情報を登録しました。');
     }
 
     /**
@@ -53,7 +56,8 @@ class CustomerController extends Controller
     public function show(string $id)
     {
         $customer = Customer::with('reservations')->findOrFail($id);
-        return view('customers.show', compact('customer'));
+        $staffs = User::all();
+        return view('customers.show', compact('customer', 'staffs'));
     }
 
     /**
@@ -61,8 +65,9 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
-        $customer = Customer::findOrFail($id); // ← これで $customer を取得
-        return view('customers.edit', compact('customer'));
+        $customer = Customer::findOrFail($id);
+        $staffs = User::all();
+        return view('customers.edit', compact('customer', 'staffs'));
     }
 
     /**
@@ -70,12 +75,13 @@ class CustomerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $customer = Customer::findOrFail($id); // ← これで $customer を取得
+        $customer = Customer::findOrFail($id);
         $validated = $request->validate([
             'name' => 'required|max:50',
             'email' => 'required|email|unique:customers,email,' . $customer->id,
             'phone' => 'nullable|max:20',
             'address' => 'nullable|max:100',
+            'staff_id' => 'nullable|exists:users,id',
         ]);
         $customer->update($validated);
         return redirect()->route('customers.index')->with('success', '顧客情報を更新しました。');
@@ -86,8 +92,8 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        $customer = Customer::findOrFail($id); // ← これで $customer を取得
+        $customer = Customer::findOrFail($id);
         $customer->delete();
-        return redirect()->route('customers.index')->with('success', '顧客を削除しました。');
+        return redirect()->route('customers.index')->with('success', '顧客情報を削除しました。');
     }
 }

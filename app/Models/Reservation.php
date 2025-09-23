@@ -16,7 +16,7 @@ class Reservation extends Model
         'customer_id',
         'location',
         'description',
-        'staff',
+        'staff_id',
         'color',
     ];
 
@@ -31,5 +31,10 @@ class Reservation extends Model
 
     public function creator() {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
     }
 }

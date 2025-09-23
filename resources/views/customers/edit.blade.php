@@ -9,7 +9,17 @@
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
+                <!-- エラーメッセージ（Bladeのバリデーション用） -->
+                @if ($errors->any())
+                    <div class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3">
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div id="editerrorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
                 <form action="{{ route('customers.update', $customer->id) }}" method="POST" novalidate>
                     @csrf
                     @method('PUT')
@@ -17,33 +27,33 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">名前</label>
                         <input type="text" name="name" value="{{ old('name', $customer->name) }}" class="w-full border px-3 py-2 rounded mt-1" required>
-                        @error('name')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">メール</label>
                         <input type="email" name="email" value="{{ old('email', $customer->email) }}" class="w-full border px-3 py-2 rounded mt-1" required>
-                        @error('email')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">電話</label>
                         <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('phone')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">住所</label>
                         <input type="text" name="address" value="{{ old('address', $customer->address) }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('address')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium">担当者</label>
+                        <select name="staff_id" id="staff_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="">-- 担当者を選択 --</option>
+                            @foreach($staffs as $staff)
+                                <option value="{{ $staff->id }}" {{ old('staff_id', $customer->staff_id ?? '') == $staff->id ? 'selected' : '' }}>
+                                    {{ $staff->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="flex justify-end space-x-2">

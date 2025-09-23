@@ -6,20 +6,22 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Customer;
+use App\Models\User;
 
 class ReservationController extends Controller
 {
     public function view()
     {
         $customers = Customer::all();
-
-        return view('reservations.index', compact('customers'));
+        $staffs = User::all();
+        return view('reservations.index', compact('customers', 'staffs'));
     }
 
     public function create()
     {
         $customers = Customer::all();
-        return view('reservations.create', compact('customers'));
+        $staffs = User::all();
+        return view('reservations.create', compact('customers', 'staffs'));
     }
 
     public function store(Request $request)
@@ -31,7 +33,7 @@ class ReservationController extends Controller
             'customer_id' => 'nullable|exists:customers,id',
             'color' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-            'staff' => 'nullable|string|max:255',
+            'staff_id' => 'required|exists:users,id',
             'description' => 'nullable|string',
         ]);
         Reservation::create($validated);
@@ -56,7 +58,7 @@ class ReservationController extends Controller
             'customer_id' => 'nullable|exists:customers,id',
             'color' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-            'staff' => 'nullable|string|max:255',
+            'staff_id' => 'nullable|exists:users,id',
             'description' => 'nullable|string',
         ]);
 
@@ -69,7 +71,8 @@ class ReservationController extends Controller
     public function edit(Reservation $reservation)
     {
         $customers = Customer::all();
-        return view('reservations.edit', compact('reservation', 'customers'));
+        $staffs = User::all();
+        return view('reservations.edit', compact('reservation', 'customers', 'staffs'));
     }
 
     public function destroy(Reservation $reservation)
@@ -80,7 +83,7 @@ class ReservationController extends Controller
 
     public function apiIndex()
     {
-        $reservations = Reservation::with('customer')->get();
+        $reservations = Reservation::with(['customer', 'staff'])->get();
 
         return response()->json($reservations->map(function ($r) {
             return [
@@ -90,9 +93,10 @@ class ReservationController extends Controller
                 'start' => $r->start ? $r->start->toIso8601String() : null,
                 'end' => $r->end ? $r->end->toIso8601String() : null,
                 'location' => $r->location,
-                'staff' => $r->staff,
-                'customer_name' => $r->customer?->name,
                 'description' => $r->description,
+                'staff_name' => $r->staff?->name,
+                'staff_id' => $r->staff?->id,
+                'customer_name' => $r->customer?->name,
                 'customer_id' => $r->customer?->id,
             ];
         }));
