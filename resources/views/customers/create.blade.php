@@ -9,39 +9,37 @@
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
+                <!-- エラーメッセージ（Bladeのバリデーション用） -->
+                @if ($errors->any())
+                    <div class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3">
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div id="editerrorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
                 <form action="{{ route('customers.store') }}" method="POST" novalidate>
                     @csrf
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">名前</label>
                         <input type="text" name="name" value="{{ old('name') }}" class="w-full border px-3 py-2 rounded mt-1" required>
-                        @error('name')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">メール</label>
                         <input type="email" name="email" value="{{ old('email') }}" class="w-full border px-3 py-2 rounded mt-1" required>
-                        @error('email')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">電話</label>
                         <input type="text" name="phone" value="{{ old('phone') }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('phone')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">住所</label>
                         <input type="text" name="address" value="{{ old('address') }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('address')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="mb-4">
