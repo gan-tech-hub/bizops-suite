@@ -12,9 +12,18 @@ class ReservationController extends Controller
 {
     public function view()
     {
-        $customers = Customer::all();
+        $user = auth()->user();
         $staffs = User::all();
-        return view('reservations.index', compact('customers', 'staffs'));
+
+        if ($user->isAdmin()) {
+            $reservations = Reservation::with(['customer', 'staff'])->get();
+            $customers = Customer::with('staff')->get();
+        } else {
+            $reservations = Reservation::with(['customer', 'staff'])->where('staff_id', $user->id)->get();
+            $customers = Customer::with('staff')->where('staff_id', $user->id)->get();
+        }
+
+        return view('reservations.index', compact('reservations', 'customers', 'staffs'));
     }
 
     public function create()
@@ -83,7 +92,17 @@ class ReservationController extends Controller
 
     public function apiIndex()
     {
-        $reservations = Reservation::with(['customer', 'staff'])->get();
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            // 管理者は全予約取得
+            $reservations = Reservation::with(['customer', 'staff'])->get();
+        } else {
+            // 一般ユーザは自分の担当予約のみ取得
+            $reservations = Reservation::with(['customer', 'staff'])
+                                    ->where('staff_id', $user->id)
+                                    ->get();
+        }
 
         return response()->json($reservations->map(function ($r) {
             return [

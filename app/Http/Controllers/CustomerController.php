@@ -14,6 +14,12 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $query = Customer::query();
+        $user = auth()->user();
+
+        if (!$user->isAdmin()) {
+            // 一般ユーザは自分が担当の顧客のみ
+            $query->where('staff_id', $user->id);
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -55,7 +61,16 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        $customer = Customer::with('reservations')->findOrFail($id);
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            $customer = Customer::with('reservations')->findOrFail($id);
+        } else {
+            $customer = Customer::with(['reservations' => function ($query) use ($user) {
+                $query->where('staff_id', $user->id);
+            }])->findOrFail($id);
+        }
+
         $staffs = User::all();
         return view('customers.show', compact('customer', 'staffs'));
     }
