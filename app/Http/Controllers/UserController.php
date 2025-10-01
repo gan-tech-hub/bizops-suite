@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -13,14 +14,30 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-    protected function create(array $data)
+    public function create()
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
+        return view('users.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'position' => 'nullable|string|max:255',
+            'role' => 'required|in:general,admin',
         ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'position' => $validated['position'] ?? null,
+            'role' => $validated['role'],
+        ]);
+
+        return redirect()->route('staffs.index')->with('success', 'ユーザーを登録しました');
     }
 
     public function edit(User $user)

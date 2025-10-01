@@ -122,9 +122,9 @@
                     <label class="block text-sm font-medium">詳細</label>
                     <textarea name="description" class="w-full border rounded p-2"></textarea>
                 </div>
-                <div class="flex justify-end gap-2 mt-4">
-                    <button type="button" id="createCancelBtn" class="px-4 py-2 bg-gray-400 text-white rounded">キャンセル</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">保存</button>
+                <div class="flex justify-end space-x-2">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">登録</button>
+                    <button type="button" id="createCancelBtn" class="bg-gray-500 text-white px-4 py-2 rounded">キャンセル</button>
                 </div>
             </form>
         </div>

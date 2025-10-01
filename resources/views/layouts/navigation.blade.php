@@ -26,6 +26,15 @@
                         {{ __('予約管理') }}
                     </x-nav-link>
                 </div>
+                @auth
+                    @if(Auth::user()->role === 'admin')
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <x-nav-link :href="route('staffs.index')" :active="request()->routeIs('staffs.*')">
+                                {{ __('担当者管理') }}
+                            </x-nav-link>
+                        </div>
+                    @endif
+                @endauth
             </div>
 
             <!-- Settings Dropdown -->

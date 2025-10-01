@@ -7,22 +7,22 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\StaffController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-#Route::get('/', function () {
-#    return view('welcome');
-#});
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-Route::get('/users', [UserController::class, 'index'])->middleware(['auth'])->name('users.index');
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+#Route::get('/users', [UserController::class, 'index'])->middleware(['auth'])->name('users.index');
+#Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+#Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+#Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+#Route::get('/users/create', [StaffController::class, 'create'])->name('users.create');
 
-Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::put('/reservations/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
+Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+Route::get('/reservations/{reservation}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
 
 Route::resource('users', UserController::class);
 Route::resource('customers', CustomerController::class)->middleware('auth');
@@ -32,20 +32,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::get('/reservations', [ReservationController::class, 'view'])->name('reservations.view');
 });
 
-Route::get('/reservations', [ReservationController::class, 'view'])->name('reservations.view');
-#Route::resource('reservations', ReservationController::class)->except(['index']);
-Route::get('/reservations/{reservation}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
-Route::put('/reservations/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
-Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
-Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+Route::middleware(['auth', 'can:admin'])->group(function () {
+#    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/staffs', [StaffController::class, 'index'])->name('staffs.index');
+    Route::post('/staffs', [StaffController::class, 'store'])->name('staffs.store');
+    Route::get('/staffs/create', [StaffController::class, 'create'])->name('staffs.create');
+    Route::get('/staffs/{user}', [StaffController::class, 'show'])->name('staffs.show');
+    Route::put('/staffs/{user}', [StaffController::class, 'update'])->name('staffs.update');
+    Route::get('/staffs/{user}/edit', [StaffController::class, 'edit'])->name('staffs.edit');
+    Route::delete('/staffs/{user}', [StaffController::class, 'destroy'])->name('staffs.destroy');
+});
+
 Route::prefix('api')->group(function() {
     Route::get('reservations', [ReservationController::class, 'apiIndex']);
     Route::post('reservations', [ReservationController::class, 'apiStore']);

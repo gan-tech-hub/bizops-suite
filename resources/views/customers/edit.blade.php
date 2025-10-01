@@ -57,12 +57,12 @@
                     </div>
 
                     <div class="flex justify-end space-x-2">
-                        <a href="{{ route('customers.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
-                            キャンセル
-                        </a>
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                             更新
                         </button>
+                        <a href="{{ route('customers.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">
+                            キャンセル
+                        </a>
                     </div>
                 </form>
 

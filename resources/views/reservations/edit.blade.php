@@ -95,10 +95,10 @@
                     </div>
 
                     <!-- ボタン群 -->
-                    <div class="flex space-x-2">
+                    <div class="flex justify-end space-x-2">
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">更新</button>
                         <a href="{{ route('reservations.view') }}" 
-                           class="bg-gray-500 text-white px-4 py-2 rounded">戻る</a>
+                           class="bg-gray-500 text-white px-4 py-2 rounded">キャンセル</a>
                     </div>
                 </form>
             </div>

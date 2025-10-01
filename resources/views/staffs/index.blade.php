@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold text-gray-800 leading-tight">
-            顧客管理
+            担当者管理
         </h2>
     </x-slot>
 
@@ -48,7 +48,7 @@
                     </script>
                 @endif
 
-                <a href="{{ route('customers.create') }}" 
+                <a href="{{ route('users.create') }}" 
                    class="mb-4 inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded">
                     ＋ 新規登録
                 </a>
@@ -58,28 +58,30 @@
                         <tr>
                             <th class="border px-4 py-2 text-center">ID</th>
                             <th class="border px-4 py-2 text-center">名前</th>
+                            <th class="border px-4 py-2 text-center">権限</th>
+                            <th class="border px-4 py-2 text-center">役職</th>
                             <th class="border px-4 py-2 text-center">メール</th>
-                            <th class="border px-4 py-2 text-center">電話</th>
-                            <th class="border px-4 py-2 text-center">住所</th>
-                            <th class="border px-4 py-2 text-center">担当者</th>
                             <th class="border px-4 py-2 text-center">操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($customers as $customer)
+                        @foreach ($staffs as $staff)
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-4 py-2">{{ $customer->id }}</td>
-                                <td class="border px-4 py-2">{{ $customer->name }}</td>
-                                <td class="border px-4 py-2">{{ $customer->email }}</td>
-                                <td class="border px-4 py-2">{{ $customer->phone }}</td>
-                                <td class="border px-4 py-2">{{ $customer->address }}</td>
+                                <td class="border px-4 py-2">{{ $staff->id }}</td>
                                 <td class="border px-4 py-2">
-                                    {{ $customer->staff ? $customer->staff->name : '未設定' }}
+                                    <a href="{{ route('staffs.show', $staff) }}" class="text-blue-500 underline">
+                                        {{ $staff->name }}
+                                    </a>
                                 </td>
+                                <td class="border px-4 py-2">
+                                    {{ $staff->role == 'admin' ? '管理者' : '一般' }}
+                                </td>
+                                <td class="border px-4 py-2">{{ $staff->position }}</td>
+                                <td class="border px-4 py-2">{{ $staff->email }}</td>
                                 <td class="border px-4 py-2 text-center space-x-2">
-                                    <a href="{{ route('customers.edit', $customer) }}" 
+                                    <a href="{{ route('staffs.edit', $staff) }}" 
                                        class="text-blue-500 hover:underline">編集</a>
-                                    <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="inline">
+                                    <form action="{{ route('staffs.destroy', $staff) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:underline"
