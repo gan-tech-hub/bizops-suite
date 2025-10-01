@@ -81,10 +81,13 @@
                         ダッシュボードへ
                     </a>
                     <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
-                        顧客一覧へ
+                        顧客管理へ
                     </a>
                     <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
-                        予約登録へ
+                        予約管理へ
+                    </a>
+                    <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
+                        担当者管理へ
                     </a>
                 </div>
             @endauth
