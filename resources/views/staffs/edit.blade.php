@@ -48,10 +48,11 @@
                     </div>
 
                     <div class="flex justify-end space-x-2">
+                        <input type="hidden" name="redirect_to" value="{{ url()->previous() }}">
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
                             更新
                         </button>
-                        <a href="{{ route('staffs.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">
+                        <a href="{{ url()->previous() }}" class="bg-gray-500 text-white px-4 py-2 rounded">
                             キャンセル
                         </a>
                     </div>

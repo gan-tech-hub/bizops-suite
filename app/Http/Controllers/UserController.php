@@ -37,7 +37,7 @@ class UserController extends Controller
             'role' => $validated['role'],
         ]);
 
-        return redirect()->route('staffs.index')->with('success', 'ユーザーを登録しました');
+        return redirect()->route('staffs.index')->with('success', 'ユーザー情報を登録しました');
     }
 
     public function edit(User $user)
@@ -56,13 +56,22 @@ class UserController extends Controller
 
         $user->update($request->only(['name', 'email', 'position', 'role']));
 
-        return redirect()->route('users.index')->with('success', 'ユーザー情報を更新しました。');
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'ユーザー情報を更新しました');
+        }
+
+        return redirect()->route('users.index')->with('success', 'ユーザー情報を更新しました');
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'ユーザー情報を削除しました。');
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'ユーザー情報を削除しました');
+        }
+
+        return redirect()->route('users.index')->with('success', 'ユーザー情報を削除しました');
     }
 }
 

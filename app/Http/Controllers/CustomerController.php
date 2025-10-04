@@ -53,7 +53,7 @@ class CustomerController extends Controller
             'staff_id' => 'nullable|exists:users,id',
         ]);
         Customer::create($validated);
-        return redirect()->route('customers.index')->with('success', '顧客情報を登録しました。');
+        return redirect()->route('customers.index')->with('success', '顧客情報を登録しました');
     }
 
     /**
@@ -99,16 +99,26 @@ class CustomerController extends Controller
             'staff_id' => 'nullable|exists:users,id',
         ]);
         $customer->update($validated);
-        return redirect()->route('customers.index')->with('success', '顧客情報を更新しました。');
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', '顧客情報を更新しました');
+        }
+        
+        return redirect()->route('customers.index')->with('success', '顧客情報を更新しました');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $customer = Customer::findOrFail($id);
         $customer->delete();
-        return redirect()->route('customers.index')->with('success', '顧客情報を削除しました。');
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', '顧客情報を削除しました');
+        }
+        
+        return redirect()->route('customers.index')->with('success', '顧客情報を削除しました');
     }
 }

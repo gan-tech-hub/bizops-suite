@@ -60,4 +60,9 @@ class User extends Authenticatable
     }
 
     protected $dates = ['deleted_at'];
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'staff_id'); 
+    }
 }

@@ -35,14 +35,14 @@ class StaffController extends Controller
 
         $user->update($request->only(['name', 'email', 'position', 'role']));
 
-        return redirect()->route('staffs.index')->with('success', '担当者情報を更新しました。');
+        return redirect()->route('staffs.index')->with('success', '担当者情報を更新しました');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return redirect()->route('staffs.index')->with('success', '担当者情報を削除しました。');
+        return redirect()->route('staffs.index')->with('success', '担当者情報を削除しました');
     }
 
     public function create()
@@ -68,6 +68,6 @@ class StaffController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('staffs.index')->with('success', '担当者を追加しました。');
+        return redirect()->route('staffs.index')->with('success', '担当者を追加しました');
     }
 }

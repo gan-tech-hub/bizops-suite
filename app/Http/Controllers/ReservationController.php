@@ -73,8 +73,11 @@ class ReservationController extends Controller
 
         $reservation->update($validated);
 
-        return redirect()->route('reservations.view')
-                        ->with('success', '予約を更新しました');
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', '予約を更新しました');
+        }
+
+        return redirect()->route('reservations.view')->with('success', '予約を更新しました');
     }
 
     public function edit(Reservation $reservation)
@@ -84,9 +87,14 @@ class ReservationController extends Controller
         return view('reservations.edit', compact('reservation', 'customers', 'staffs'));
     }
 
-    public function destroy(Reservation $reservation)
+    public function destroy(Request $request, Reservation $reservation)
     {
         $reservation->delete();
+
+        if ($request->filled('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', '予約を削除しました');
+        }
+
         return redirect()->route('reservations.view')->with('success', '予約を削除しました');
     }
 
