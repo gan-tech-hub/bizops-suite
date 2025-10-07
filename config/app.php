@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,9 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'aliases' => array_merge(\Illuminate\Support\Facades\Facade::defaultAliases()->toArray(), [
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+    ]),
 
 ];

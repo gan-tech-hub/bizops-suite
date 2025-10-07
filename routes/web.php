@@ -8,16 +8,11 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\DataExportController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-
-#Route::get('/users', [UserController::class, 'index'])->middleware(['auth'])->name('users.index');
-#Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-#Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-#Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-#Route::get('/users/create', [StaffController::class, 'create'])->name('users.create');
 
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 Route::put('/reservations/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
@@ -42,7 +37,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'can:admin'])->group(function () {
-#    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/staffs', [StaffController::class, 'index'])->name('staffs.index');
     Route::post('/staffs', [StaffController::class, 'store'])->name('staffs.store');
     Route::get('/staffs/create', [StaffController::class, 'create'])->name('staffs.create');
@@ -50,6 +44,8 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::put('/staffs/{user}', [StaffController::class, 'update'])->name('staffs.update');
     Route::get('/staffs/{user}/edit', [StaffController::class, 'edit'])->name('staffs.edit');
     Route::delete('/staffs/{user}', [StaffController::class, 'destroy'])->name('staffs.destroy');
+    Route::get('/data', [DataExportController::class, 'index'])->name('data.index');
+    Route::get('/data/export/{type}/{format}', [DataExportController::class, 'export'])->name('data.export');
 });
 
 Route::prefix('api')->group(function() {

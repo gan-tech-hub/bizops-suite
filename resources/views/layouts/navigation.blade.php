@@ -33,6 +33,11 @@
                                 {{ __('担当者管理') }}
                             </x-nav-link>
                         </div>
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <x-nav-link :href="route('data.index')" :active="request()->routeIs('data.*')">
+                                {{ __('データ管理') }}
+                            </x-nav-link>
+                        </div>
                     @endif
                 @endauth
             </div>
