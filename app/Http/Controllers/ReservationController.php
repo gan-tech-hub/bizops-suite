@@ -23,7 +23,11 @@ class ReservationController extends Controller
             $customers = Customer::with('staff')->where('staff_id', $user->id)->get();
         }
 
-        return view('reservations.index', compact('reservations', 'customers', 'staffs'));
+        return response()
+            ->view('reservations.index', compact('reservations', 'customers', 'staffs'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     public function create()

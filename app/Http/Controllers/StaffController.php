@@ -10,13 +10,21 @@ class StaffController extends Controller
     public function index()
     {
         $staffs = User::all();
-        return view('staffs.index', compact('staffs'));
+        return response()
+            ->view('staffs.index', compact('staffs'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     public function show(User $user)
     {
         $user->load(['customers', 'reservations']);
-        return view('staffs.show', compact('user'));
+        return response()
+            ->view('staffs.show', compact('user'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     public function edit(User $user)

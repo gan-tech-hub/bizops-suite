@@ -14,6 +14,15 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
+    <script>
+        // 戻る操作（bfcache復元）時にフラッシュを削除
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                const flash = document.getElementById("flash-message");
+                if (flash) flash.remove();
+            }
+        });
+    </script>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')

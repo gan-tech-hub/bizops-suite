@@ -28,7 +28,11 @@ class CustomerController extends Controller
         }
 
         $customers = $query->get();
-        return view('customers.index', compact('customers'));
+        return response()
+            ->view('customers.index', compact('customers'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     /**
@@ -72,7 +76,11 @@ class CustomerController extends Controller
         }
 
         $staffs = User::all();
-        return view('customers.show', compact('customer', 'staffs'));
+        return response()
+            ->view('customers.show', compact('customer', 'staffs'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     /**

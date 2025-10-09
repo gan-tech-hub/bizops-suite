@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\DataExportController;
+use App\Http\Controllers\AnnouncementController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::get('/reservations', [ReservationController::class, 'view'])->name('reservations.view');
+    Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.show');
 });
 
 Route::middleware(['auth', 'can:admin'])->group(function () {
@@ -46,6 +49,7 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::delete('/staffs/{user}', [StaffController::class, 'destroy'])->name('staffs.destroy');
     Route::get('/data', [DataExportController::class, 'index'])->name('data.index');
     Route::get('/data/export/{type}/{format}', [DataExportController::class, 'export'])->name('data.export');
+    Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
 });
 
 Route::prefix('api')->group(function() {
