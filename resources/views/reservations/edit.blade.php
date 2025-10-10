@@ -64,7 +64,7 @@
                     <!-- 担当者 -->
                     <div class="mb-4">
                         <select name="staff_id" id="staff_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                            <option value="">-- 顧客を選択 --</option>
+                            <option value="">-- 担当者を選択 --</option>
                             @foreach($staffs as $s)
                                 <option value="{{ $s->id }}"
                                     {{ old('staff_id', $reservation->staff_id ?? '') == $s->id ? 'selected' : '' }}>

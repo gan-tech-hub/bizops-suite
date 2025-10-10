@@ -71,8 +71,11 @@ class ReservationController extends Controller
             'customer_id' => 'nullable|exists:customers,id',
             'color' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-            'staff_id' => 'nullable|exists:users,id',
+            'staff_id' => ['required', 'exists:users,id'],
             'description' => 'nullable|string',
+        ], [
+            'staff_id.required' => '担当者を選択してください。',
+            'staff_id.exists' => '選択された担当者が存在しません。',
         ]);
 
         $reservation->update($validated);

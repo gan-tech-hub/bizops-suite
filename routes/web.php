@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
@@ -11,7 +12,14 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\DataExportController;
 use App\Http\Controllers\AnnouncementController;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    // ログインしている場合 → dashboard へ
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    // 未ログインの場合 → ログインページへ
+    return redirect()->route('login');
+});
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 

@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const title = titleEl.value.trim();
                 const start = new Date(startEl.value);
                 const end = new Date(endEl.value);
+                const staff = staffIDEl.value;
 
                 let errors = [];
 
@@ -152,6 +153,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (start >= end) {
                     errors.push("終了日時は開始日時より後に設定してください。");
+                }
+
+                if (!staff) {
+                    errors.push("担当者を選択してください。");
                 }
 
                 // エラー表示処理
