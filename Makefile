@@ -28,16 +28,6 @@ clear:
 	@echo "✅ マイグレーション完了！"
 
 # =====================================
-# 🧹 開発用キャッシュクリア
-# =====================================
-dev-clear:
-	@echo "🧹 開発用キャッシュクリア中..."
-	$(SAIL) artisan config:clear
-	$(SAIL) artisan route:clear
-	$(SAIL) artisan view:clear
-	@echo "✅ 開発キャッシュクリア完了！"
-
-# =====================================
 # 🚀 本番デプロイ時（キャッシュ最適化）
 # =====================================
 deploy:
@@ -61,6 +51,7 @@ fix:
 dev-clear:
 	@echo "🧹 Clearing Laravel caches..."
 	$(SAIL) artisan config:clear
+	$(SAIL) artisan cache:clear
 	$(SAIL) artisan route:clear
 	$(SAIL) artisan view:clear
 	@echo "✅ Development caches cleared!"
