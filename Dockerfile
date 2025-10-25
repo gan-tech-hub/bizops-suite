@@ -31,7 +31,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # 環境変数
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+#ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 ENV PORT=10000
 
 # Apache設定反映
