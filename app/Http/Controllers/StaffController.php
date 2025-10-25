@@ -35,10 +35,10 @@ class StaffController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'position' => 'nullable|string|max:255',
-            'role' => 'required|in:general,admin',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'position' => ['nullable', 'string', 'max:255'],
+            'role' => ['required', 'in:general,admin'],
         ]);
 
         $user->update($request->only(['name', 'email', 'position', 'role']));

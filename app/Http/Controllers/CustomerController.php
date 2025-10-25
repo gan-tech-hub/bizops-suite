@@ -88,6 +88,13 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
+        $currentUrl = url()->current();
+        $previousUrl = url()->previous();
+
+        if ($previousUrl !== $currentUrl && session('previous_url') !== $previousUrl) {
+            session(['previous_url' => $previousUrl]);
+        }
+
         $customer = Customer::findOrFail($id);
         $staffs = User::all();
         return view('customers.edit', compact('customer', 'staffs'));
@@ -106,13 +113,13 @@ class CustomerController extends Controller
             'address' => 'nullable|max:100',
             'staff_id' => 'nullable|exists:users,id',
         ]);
+
         $customer->update($validated);
 
-        if ($request->filled('redirect_to')) {
-            return redirect($request->redirect_to)->with('success', '顧客情報を更新しました');
-        }
-        
-        return redirect()->route('customers.index')->with('success', '顧客情報を更新しました');
+        $redirectUrl = session('previous_url', route('customers.index'));
+        session()->forget('previous_url');
+
+        return redirect($redirectUrl)->with('success', '顧客情報を更新しました');
     }
 
     /**

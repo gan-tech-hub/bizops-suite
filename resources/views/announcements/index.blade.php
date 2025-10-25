@@ -30,6 +30,9 @@
                         {{ $announcements->links() }}
                     </div>
                 @endif
+                <div class="mt-4">
+                    <a href="{{ url()->previous() }}" class="text-sm text-blue-600 hover:underline">一覧へ戻る</a>
+                </div>
             </div>
         </div>
     </div>

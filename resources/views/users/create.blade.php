@@ -2,21 +2,30 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            担当者新規登録
+            担当者登録
         </h2>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-
+                <!-- エラーメッセージ（Bladeのバリデーション用） -->
+                @if ($errors->any())
+                    <div class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3">
+                        <ul class="list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <div id="editerrorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
                 <form action="{{ route('users.store') }}" method="POST">
                     @csrf
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">名前</label>
                         <input type="text" name="name" value="{{ old('name') }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('name') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
@@ -35,13 +44,11 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">メールアドレス</label>
                         <input type="email" name="email" value="{{ old('email') }}" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('email') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-medium">パスワード</label>
                         <input type="password" name="password" class="w-full border px-3 py-2 rounded mt-1">
-                        @error('password') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">

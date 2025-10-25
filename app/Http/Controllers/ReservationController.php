@@ -42,7 +42,7 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'start' => 'required|date',
-            'end' => 'nullable|date|after_or_equal:start',
+            'end' => 'required|date|after_or_equal:start',
             'customer_id' => 'nullable|exists:customers,id',
             'color' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
@@ -57,10 +57,9 @@ class ReservationController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'start' => 'required|date',
+            'start' => 'required',
             'end' => [
-                'nullable',
-                'date',
+                'required',
                 // start より後であることをチェック
                 function ($attribute, $value, $fail) use ($request) {
                     if ($value && strtotime($value) <= strtotime($request->start)) {
@@ -80,15 +79,21 @@ class ReservationController extends Controller
 
         $reservation->update($validated);
 
-        if ($request->filled('redirect_to')) {
-            return redirect($request->redirect_to)->with('success', '予約を更新しました');
-        }
+        $redirectUrl = session('previous_url', route('customers.index'));
+        session()->forget('previous_url');
 
-        return redirect()->route('reservations.view')->with('success', '予約を更新しました');
+        return redirect($redirectUrl)->with('success', '予約を更新しました');
     }
 
     public function edit(Reservation $reservation)
     {
+        $currentUrl = url()->current();
+        $previousUrl = url()->previous();
+
+        if ($previousUrl !== $currentUrl && session('previous_url') !== $previousUrl) {
+            session(['previous_url' => $previousUrl]);
+        }
+
         $customers = Customer::all();
         $staffs = User::all();
         return view('reservations.edit', compact('reservation', 'customers', 'staffs'));

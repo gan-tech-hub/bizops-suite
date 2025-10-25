@@ -17,7 +17,7 @@
                     </div>
                 @endif
                 <div id="editerrorMsg" class="text-red-800 bg-red-100 border border-red-300 px-4 py-2 rounded mb-3 hidden"></div>
-                <form method="POST" action="{{ route('reservations.update', $reservation) }}">
+                <form method="POST" action="{{ route('reservations.update', $reservation) }}" novalidate>
                     @csrf
                     @method('PUT')
 
@@ -96,10 +96,10 @@
 
                     <!-- ボタン群 -->
                     <div class="flex justify-end space-x-2">
-                        <input type="hidden" name="redirect_to" value="{{ url()->previous() }}">
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">更新</button>
-                        <a href="{{ url()->previous() }}" 
-                           class="bg-gray-500 text-white px-4 py-2 rounded">キャンセル</a>
+                        <a href="{{ session('previous_url', route('reservations.view')) }}" class="bg-gray-500 text-white px-4 py-2 rounded">
+                            キャンセル
+                        </a>
                     </div>
                 </form>
             </div>

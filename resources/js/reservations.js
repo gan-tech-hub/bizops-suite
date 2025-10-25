@@ -151,6 +151,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     errors.push("タイトルは必須です。");
                 }
 
+                if ([...title].length  >= 255 ) {
+                    errors.push("タイトルは255文字以内で入力してください。");
+                }
+
+                if (isNaN(start)) {
+                    errors.push("開始日時が無効です。");
+                }
+
+                if (isNaN(end)) {
+                    errors.push("終了日時が無効です。");
+                }
+
                 if (start >= end) {
                     errors.push("終了日時は開始日時より後に設定してください。");
                 }

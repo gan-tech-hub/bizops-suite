@@ -22,7 +22,7 @@
                 class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition relative">
                     <h3 class="text-xl font-semibold mb-2">👤 顧客管理</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-2">
-                        顧客情報の登録・編集・検索ができます
+                        顧客情報の登録・編集ができます
                     </p>
                     <p class="text-sm text-gray-500">
                         担当顧客数：<span class="font-semibold text-indigo-600">{{ $customerCount }}</span> 件
