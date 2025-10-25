@@ -11,4 +11,4 @@ storage/framework/views
 npm-debug.log
 Dockerfile
 docker-compose.yml
-docker/
+!docker/apache/000-default.conf
