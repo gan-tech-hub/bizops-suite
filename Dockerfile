@@ -1,0 +1,36 @@
+# ======================================
+# Laravel + PHP + SQLite for Render
+# ======================================
+
+FROM php:8.3-apache
+
+# Install required extensions
+RUN apt-get update && apt-get install -y \
+    zip unzip git libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_sqlite
+
+# Enable Apache rewrite module
+RUN a2enmod rewrite
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project files
+COPY . .
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Laravel setup
+RUN php artisan key:generate || true
+RUN chmod -R 775 storage bootstrap/cache
+RUN touch database/database.sqlite && chmod 666 database/database.sqlite
+
+# Apache document root
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+EXPOSE 80
+CMD ["apache2-foreground"]
