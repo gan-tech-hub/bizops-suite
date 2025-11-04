@@ -24,6 +24,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Laravel setup
 RUN php artisan key:generate || true
+RUN chown -R www-data:www-data storage bootstrap/cache
 RUN chmod -R 775 storage bootstrap/cache
 RUN touch database/database.sqlite && chmod 666 database/database.sqlite
 
