@@ -20,21 +20,26 @@ COPY . .
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader
 
-# Install Node dependencies and build assets
-RUN npm install && npm run build
+# Composer install (production optimized)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+
+# Install Node dependencies and build assets (for Vite)
+RUN npm ci && npm run build
 
 # Laravel setup
-RUN php artisan key:generate || true
-RUN chown -R www-data:www-data storage bootstrap/cache public/build database
-RUN chmod -R 775 storage bootstrap/cache public/build
-RUN touch database/database.sqlite && chmod 666 database/database.sqlite
+# ※ APP_KEY は Render Environment で設定済みなので生成しない！
+RUN mkdir -p storage bootstrap/cache database \
+    && touch database/database.sqlite \
+    && chmod -R 775 storage bootstrap/cache \
+    && chmod 666 database/database.sqlite \
+    && chown -R www-data:www-data storage bootstrap/cache public/build database
 
 # Apache document root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+# Expose and start
 EXPOSE 80
 CMD ["apache2-foreground"]
