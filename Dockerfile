@@ -27,7 +27,7 @@ RUN npm install && npm run build
 
 # Laravel setup
 RUN php artisan key:generate || true
-RUN chown -R www-data:www-data storage bootstrap/cache public/build
+RUN chown -R www-data:www-data storage bootstrap/cache public/build database
 RUN chmod -R 775 storage bootstrap/cache public/build
 RUN touch database/database.sqlite && chmod 666 database/database.sqlite
 
