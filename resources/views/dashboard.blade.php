@@ -1,4 +1,6 @@
 {{-- resources/views/dashboard.blade.php --}}
+@extends('layouts.app')
+@section('content')
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -248,3 +250,4 @@
         setInterval(updateDashboardDateTime,1000);
     </script>
 </x-app-layout>
+@endsection
