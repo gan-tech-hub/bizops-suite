@@ -25,7 +25,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 # Install Node dependencies and build assets (for Vite)
-RUN npm ci && npm run build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
 # Laravel setup
 # ※ APP_KEY は Render Environment で設定済みなので生成しない！
