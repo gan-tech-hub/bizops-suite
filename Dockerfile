@@ -32,17 +32,19 @@ COPY . .
 RUN npm run build
 
 # Laravel setup
-# ※ APP_KEY は Render Environment で設定済みなので生成しない！
 RUN mkdir -p storage bootstrap/cache database \
     && touch database/database.sqlite \
-    && chmod -R 775 storage bootstrap/cache \
-    && chmod 666 database/database.sqlite \
-    && chown -R www-data:www-data storage bootstrap/cache public/build database
+    && chown -R www-data:www-data storage bootstrap/cache public/build database \
+    && chmod -R 777 storage bootstrap/cache \
+    && chmod 666 database/database.sqlite
 
 # Apache document root
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Cache optimization
+RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
 
 # Expose and start
 EXPOSE 80
