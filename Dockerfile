@@ -31,14 +31,10 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Set working directory
-WORKDIR /var/www/html
-
 # Laravel setup
 RUN mkdir -p storage bootstrap/cache database \
     && touch database/database.sqlite \
-    && chown -R www-data:www-data storage bootstrap/cache public/build database \
-    && chmod -R 777 storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
     && chmod 666 database/database.sqlite
 
 # Apache document root
