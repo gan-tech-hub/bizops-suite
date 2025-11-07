@@ -31,6 +31,9 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# Set working directory
+WORKDIR /var/www/html
+
 # Laravel setup
 RUN mkdir -p storage bootstrap/cache database \
     && touch database/database.sqlite \
