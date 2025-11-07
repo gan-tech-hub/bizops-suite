@@ -25,7 +25,6 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 # Install Node dependencies and build assets (for Vite)
-WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
