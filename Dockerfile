@@ -26,7 +26,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
 
 # Install Node dependencies and build assets (for Vite)
 RUN npm ci
-RUN npm run build
+RUN rm -rf public/build && npm run build
 
 # Laravel setup
 # ※ APP_KEY は Render Environment で設定済みなので生成しない！
@@ -40,6 +40,15 @@ RUN mkdir -p storage bootstrap/cache database \
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Cache clear
+RUN php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan storage:link && \
+    php artisan migrate --force && \
+    php artisan optimize
 
 # Expose and start
 EXPOSE 80
