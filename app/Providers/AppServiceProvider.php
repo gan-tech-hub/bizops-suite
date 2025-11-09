@@ -31,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
             'defaultFont' => 'NotoSansJP',
         ]);
 
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+        
         Gate::define('admin', function ($user) {
             return $user->role === 'admin';
         });
