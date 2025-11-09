@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\DataExportController;
 use App\Http\Controllers\AnnouncementController;
+use Illuminate\Support\Facades\Artisan;             # test route add
 
 Route::get('/', function () {
     // ログインしている場合 → dashboard へ
@@ -21,9 +22,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+# test route start
 Route::get('/debug/headers', function (\Illuminate\Http\Request $request) {
     return response()->json($request->headers->all());
 });
+
+Route::get('/debug/routes', function () {
+    Artisan::call('route:list');
+    return nl2br(Artisan::output());
+});
+# test route add end
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
