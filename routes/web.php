@@ -21,6 +21,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/debug/headers', function (\Illuminate\Http\Request $request) {
+    return response()->json($request->headers->all());
+});
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
