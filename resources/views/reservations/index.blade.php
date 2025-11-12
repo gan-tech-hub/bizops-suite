@@ -51,7 +51,9 @@
         </div>
     </div>
     {{-- ✅ ViteでビルドしたJSを読み込む --}}
-    @vite(['resources/js/reservations.js'])
+    @section('scripts')
+        @vite(['resources/js/reservations.js'])
+    @endsection
     <!-- Reservation Modal -->
     <div id="reservationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-96 p-6">
