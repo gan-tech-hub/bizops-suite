@@ -1,5 +1,5 @@
 import './bootstrap';
-import './reservations';
+//import './reservations';
 
 import Alpine from 'alpinejs';
 
