@@ -5,7 +5,7 @@ export default defineConfig({
     base: 'https://bizops-suite.onrender.com/',
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/css/app.css', 'resources/js/app.js','resources/js/reservations.js',],
             refresh: true,
         }),
     ],
