@@ -1,61 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# **BizOpsSuite**  
+Laravel + SQLite + Breeze  
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+顧客管理・予約管理・担当者管理を一元化できる、業務支援統合ツールです。  
+中小規模事業者が抱える「顧客情報の分散」「予約・担当調整の煩雑さ」を解消します。  
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 **デプロイURL**  
+🔗 https://bizops-suite.onrender.com  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ **機能概要**  
+✅ 顧客管理（登録・編集・削除・検索）  
+✅ 予約管理（日時・担当者・顧客を紐づけ）  
+✅ 担当者管理（役職・氏名・ステータス表示）  
+✅ ログイン／ログアウト機能（Laravel Breeze認証）  
+✅ 管理画面（ダッシュボード）  
+✅ レスポンシブ対応（PC／スマホ対応）  
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🖥️ **技術スタック**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### フロントエンド  
+- Blade（Laravel標準テンプレートエンジン）  
+- Tailwind CSS  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### バックエンド  
+- Laravel 11  
+- Laravel Breeze（認証機能）  
 
-## Laravel Sponsors
+### データベース  
+- SQLite  
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### デプロイ先  
+- Render（Webサービス／DBホスティング）  
 
-### Premium Partners
+### コード管理  
+- Git / GitHub  
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### その他ツール・技術  
+- Eloquent ORM（DB操作）  
+- Vite（ビルドツール）  
+- 環境変数管理（.env）  
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ⚙️ **セットアップ方法（ローカル）**
 
-## Code of Conduct
+1️⃣ リポジトリをクローン  
+```bash
+git clone https://github.com/gan-tech-hub/bizops-suite.git
+cd bizops-suite
+2️⃣ 依存関係をインストール
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+bash
+コードをコピーする
+composer install
+npm install
+3️⃣ 環境変数を設定
+ルートに .env を作成し、以下を設定：
 
-## Security Vulnerabilities
+ini
+コードをコピーする
+APP_NAME=BizOpsSuite
+APP_URL=http://localhost
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database/database.sqlite
+※ database/database.sqlite ファイルを事前に作成しておきましょう。
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+bash
+コードをコピーする
+touch database/database.sqlite
+4️⃣ アプリキー生成
 
-## License
+bash
+コードをコピーする
+php artisan key:generate
+5️⃣ マイグレーション実行
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+bash
+コードをコピーする
+php artisan migrate
+6️⃣ ローカル起動
+
+bash
+コードをコピーする
+php artisan serve
+ブラウザで http://localhost:8000 にアクセス。
+
+📝 ライセンス
+MIT
+
+👤 作成者
+桜庭祐斗
+🔗 GitHub - gan-tech-hub
+
+📷 スクリーンショット例
+以下は画面のイメージ例です：
+※各画面（顧客一覧・予約登録・担当者管理・ダッシュボード等）のスクリーンショットを掲載予定
