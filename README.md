@@ -53,42 +53,41 @@ Laravel + SQLite + Breeze
 ```bash
 git clone https://github.com/gan-tech-hub/bizops-suite.git
 cd bizops-suite
+```
 2️⃣ 依存関係をインストール
-
-bash
-コードをコピーする
+```bash
 composer install
 npm install
+```
 3️⃣ 環境変数を設定
 ルートに .env を作成し、以下を設定：
-
-ini
-コードをコピーする
+```bash
 APP_NAME=BizOpsSuite
 APP_URL=http://localhost
 DB_CONNECTION=sqlite
 DB_DATABASE=/absolute/path/to/database/database.sqlite
+```
 ※ database/database.sqlite ファイルを事前に作成しておきましょう。
 
-bash
-コードをコピーする
+```bash
 touch database/database.sqlite
+```
 4️⃣ アプリキー生成
 
-bash
-コードをコピーする
+```bash
 php artisan key:generate
+```
 5️⃣ マイグレーション実行
 
-bash
-コードをコピーする
+```bash
 php artisan migrate
+```
 6️⃣ ローカル起動
 
-bash
-コードをコピーする
+```bash
 php artisan serve
-ブラウザで http://localhost:8000 にアクセス。
+```
+👉ブラウザで http://localhost:8000 にアクセス。
 
 📝 ライセンス
 MIT
