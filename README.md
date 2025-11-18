@@ -106,4 +106,26 @@ MIT
 
 ## 📷 スクリーンショット例  
 以下は画面のイメージ例です：  
-※各画面（顧客一覧・予約登録・担当者管理・ダッシュボード等）のスクリーンショットを掲載予定
+* ログイン画面
+<img width="516" height="425" alt="image" src="https://github.com/user-attachments/assets/0270b204-3172-4bfd-a6b9-f2b1c33790a6" />
+
+* ダッシュボード
+<img width="1234" height="729" alt="image" src="https://github.com/user-attachments/assets/42e29e89-e591-4425-83f1-e24921c660de" />
+
+* 顧客管理画面
+<img width="1242" height="526" alt="image" src="https://github.com/user-attachments/assets/bd3ce11a-3e69-4ee3-b8f1-4dc5181cf158" />
+
+* 予約管理画面
+<img width="1243" height="925" alt="image" src="https://github.com/user-attachments/assets/f370207e-c0b9-4517-91b1-7d57d1420281" />
+
+* 担当者管理画面
+<img width="1235" height="525" alt="image" src="https://github.com/user-attachments/assets/5aa765de-371d-4eeb-af4b-663eaa6a867c" />
+
+* データ管理画面
+<img width="1240" height="660" alt="image" src="https://github.com/user-attachments/assets/b10e2a18-f00c-43e0-86e1-da317d5dcda1" />
+
+
+
+
+
+
