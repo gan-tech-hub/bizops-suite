@@ -97,8 +97,10 @@ MIT
 ---
 
 ## 👤 作成者  
-**桜庭祐斗**  
-🔗 GitHub - gan-tech-hub
+* 桜庭祐斗
+
+[GitHub - gan-tech-hub](https://github.com/gan-tech-hub)
+
 
 ---
 
